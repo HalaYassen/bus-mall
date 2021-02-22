@@ -7,12 +7,15 @@ let tryCounter = 0;
 let leftImgIndex;
 let middleImgIndex;
 let rightImgIndex;
+let arrShown=[];
 let maxAttempts = 25;
 function Product(name, path) {
     this.name = name;
     this.path = path;
     this.vote = 0;
+    this.shown = 0;
     Product.items.push(this);
+
 }
 Product.items = [];
 new Product('bag', '../images/bag.jpg');
@@ -52,15 +55,19 @@ function renderThreeImages() {
 
     do {
         rightImgIndex = generateRandomIndex();
-    } while (leftImgIndex === rightImgIndex||middleImgIndex===rightImgIndex||middleImgIndex===leftImgIndex)
+    } while (leftImgIndex === rightImgIndex || middleImgIndex === rightImgIndex || middleImgIndex === leftImgIndex)
     //console.log(leftImgIndex);
 
     Product.items
     console.log(Product.items[leftImgIndex]);
 
+
     leftElement.src = Product.items[leftImgIndex].path;
+    Product.items[leftImgIndex].shown++;
     middleElement.src = Product.items[middleImgIndex].path;
+    Product.items[middleImgIndex].shown++;
     rightElement.src = Product.items[rightImgIndex].path;
+    Product.items[rightImgIndex].shown++;
 
 
 }
@@ -77,15 +84,18 @@ rightElement.addEventListener('click', handleUserClick);
 function handleUserClick(event) {
     tryCounter++;
 
-    if (tryCounter < maxAttempts) {
+    if (tryCounter <= maxAttempts) {
 
         if (event.target.id === 'left') {
-            Product.items[leftImgIndex].vote++
+            Product.items[leftImgIndex].vote++;
+            
 
         } else if (event.target.id === 'middle') {
-            Product.items[middleImgIndex].vote++
+            Product.items[middleImgIndex].vote++;
+           
         } else {
-            Product.items[rightImgIndex].vote++
+            Product.items[rightImgIndex].vote++;
+           
 
         }
         renderThreeImages();
@@ -104,8 +114,9 @@ function showResult() {
     let result;
 
     for (let i = 0; i < Product.items.length; i++) {
+        //arrShown.push(Product.items[i].shown);
         result = document.createElement('li');
         list.appendChild(result);
-        result.textContent = Product.items[i].name + ' has ' + Product.items[i].vote + ' votes';
+        result.textContent = Product.items[i].name + ' has ' + Product.items[i].vote + ' votes ' + ' and shown' + Product.items[i].shown + ' times';
     }
 }
