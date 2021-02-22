@@ -2,12 +2,14 @@
 let leftElement = document.getElementById('left');
 let middleElement = document.getElementById('middle');
 let rightElement = document.getElementById('right');
-
 let tryCounter = 0;
 let leftImgIndex;
 let middleImgIndex;
 let rightImgIndex;
-let arrShown=[];
+let arrShown = [];
+let imgName = [];
+let arrVote = [];
+Product.checkIndex=[];
 let maxAttempts = 25;
 function Product(name, path) {
     this.name = name;
@@ -15,6 +17,7 @@ function Product(name, path) {
     this.vote = 0;
     this.shown = 0;
     Product.items.push(this);
+    imgName.push(name);
 
 }
 Product.items = [];
@@ -41,26 +44,22 @@ new Product('wine-glass', '../images/wine-glass.jpg');
 
 //console.log(Product.items);
 //console.log(Product.items[2]);
-
-
 function generateRandomIndex() {
     return Math.floor(Math.random() * Product.items.length);
 }
 //console.log(Math.floor(Math.random() * Product.items.length));
 
-function renderThreeImages() {
-
+function renderThreeImages() 
+{
     leftImgIndex = generateRandomIndex();
-    middleImgIndex = generateRandomIndex();
-
-    do {
-        rightImgIndex = generateRandomIndex();
-    } while (leftImgIndex === rightImgIndex || middleImgIndex === rightImgIndex || middleImgIndex === leftImgIndex)
-    //console.log(leftImgIndex);
-
-    Product.items
-    console.log(Product.items[leftImgIndex]);
-
+    middleImgIndex=generateRandomIndex();
+    while(leftImgIndex ===middleImgIndex){
+        middleImgIndex=generateRandomIndex();
+    }
+    rightImgIndex=generateRandomIndex();
+    while(rightImgIndex===leftImgIndex||rightImgIndex===middleImgIndex){
+        rightImgIndex=generateRandomIndex();
+    }
 
     leftElement.src = Product.items[leftImgIndex].path;
     Product.items[leftImgIndex].shown++;
@@ -68,47 +67,111 @@ function renderThreeImages() {
     Product.items[middleImgIndex].shown++;
     rightElement.src = Product.items[rightImgIndex].path;
     Product.items[rightImgIndex].shown++;
+    
+    /*
+    while(Product.checkIndex.length < 6)
+    {
+        let img=generateRandomIndex();
+        if (!Product.checkIndex.includes(img)){
+            Product.checkIndex.push(img);
+        }
+    }
+        leftElement.src=Product.items[Product.checkIndex[0]].src;
+        Product.items[Product.checkIndex[0]].shown++;
+        leftImgIndex=Product.items[Product.checkIndex[0]];
+        console.log(leftImgIndex);
 
+        middleElement.src=Product.items[Product.checkIndex[1]].src;
+        Product.items[Product.checkIndex[1]].shown++;
+        middleImgIndex=Product.items[Product.checkIndex[1]];
+        console.log(middleImgIndex);
 
+        rightElement.src=Product.items[Product.checkIndex[2]].src;
+        Product.items[Product.checkIndex[2]].shown++;
+        rightImgIndex=Product.items[Product.checkIndex[2]];
+        console.log(rightImgIndex);
+        Product.checkIndex=Product.checkIndex.slice(3, 6);
+
+    
+    */
 }
-
 renderThreeImages();
-
-
-
 
 leftElement.addEventListener('click', handleUserClick);
 middleElement.addEventListener('click', handleUserClick);
 rightElement.addEventListener('click', handleUserClick);
 
-function handleUserClick(event) {
+function handleUserClick(event) 
+{
     tryCounter++;
 
     if (tryCounter <= maxAttempts) {
 
         if (event.target.id === 'left') {
             Product.items[leftImgIndex].vote++;
-            
+
 
         } else if (event.target.id === 'middle') {
             Product.items[middleImgIndex].vote++;
-           
+
         } else {
             Product.items[rightImgIndex].vote++;
-           
+
 
         }
         renderThreeImages();
 
     } else {
-        let btn = document.getElementById('btn');
-        btn.addEventListener('click', showResult);
+        // let btn = document.getElementById('btn');
+        // btn.addEventListener('click', showResult);
         leftElement.removeEventListener('click', handleUserClick);
         middleElement.removeEventListener('click', handleUserClick);
         rightElement.removeEventListener('click', handleUserClick);
+
+        for (let i = 0; i < Product.items.length; i++) {
+            arrVote.push(Product.items[i].vote)
+            // console.log(Product.items[i])
+            arrShown.push(Product.items[i].shown)
+        }
+
+        viewChart();
     }
 }
-function showResult() {
+
+function viewChart() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: imgName,
+            datasets: [
+                {
+                    label: 'Images Vote',
+                    backgroundColor: 'rgb(233, 150, 122)',
+                    borderColor: 'rgb(233, 150, 122)',
+                    data: arrVote
+                },
+
+                {
+                    label: 'Images Shown',
+                    backgroundColor: '#ffe6e6',
+                    borderColor: '#ffe6e6',
+                    data: arrShown
+                }
+            ]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+}
+
+/*
+function showResult()
+{
 
     let list = document.getElementById('listOfItem');
     let result;
@@ -119,4 +182,4 @@ function showResult() {
         list.appendChild(result);
         result.textContent = Product.items[i].name + ' has ' + Product.items[i].vote + ' votes ' + ' and shown' + Product.items[i].shown + ' times';
     }
-}
+}*/
