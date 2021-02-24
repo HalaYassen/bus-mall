@@ -9,8 +9,9 @@ let rightImgIndex;
 let arrShown = [];
 let imgName = [];
 let arrVote = [];
-let check=[];
 let maxAttempts = 25;
+
+
 function Product(name, path) {
     this.name = name;
     this.path = path;
@@ -20,6 +21,46 @@ function Product(name, path) {
     imgName.push(name);
 
 }
+
+function settImg(){
+    let voteImg =JSON.stringify(arrVote);
+    localStorage.setItem('locallyVotes',voteImg);
+    console.log(voteImg);
+    //shown
+    let shownImg=JSON.stringify(arrShown);
+    localStorage.setItem('locallyShown',shownImg);
+    console.log(shownImg);
+}
+function gettImg(){
+    let fromLocalVot=localStorage.getItem('locallyVotes');
+    let mainVote=JSON.parse(fromLocalVot);
+    console.log(mainVote);
+    if (mainVote !==null)
+    {
+       // arrVote=mainVote;
+        for (let i=0; i<Product.items.length;i++)
+        {
+            arrVote[i]+=mainVote[i];
+            console.log(arrVote);
+        }
+    }
+    //shown
+    let fromLocalShown=localStorage.getItem('locallyShown');
+    let mainShown=JSON.parse(fromLocalShown);
+    console.log(mainShown);
+    if (mainShown !==null)
+    {
+       // arrShown=mainShown;
+       for (let i=0; i<Product.items.length;i++)
+        {
+            arrShown[i]+=mainShown[i];
+            console.log(arrShown[i]);
+        }
+    }
+}
+
+
+
 Product.items = [];
 new Product('bag', '../images/bag.jpg');
 new Product('banana', '../images/banana.jpg');
@@ -119,6 +160,7 @@ function handleUserClick(event)
         renderThreeImages();
 
     } else {
+        
         // let btn = document.getElementById('btn');
         // btn.addEventListener('click', showResult);
         leftElement.removeEventListener('click', handleUserClick);
@@ -130,7 +172,10 @@ function handleUserClick(event)
             // console.log(Product.items[i])
             arrShown.push(Product.items[i].shown)
         }
-
+        gettImg();
+        settImg();
+        //localStorage.setItem('vote', arrVote);
+        //localStorage.setItem('Showed', arrShown);
         viewChart();
     }
 }
@@ -165,18 +210,3 @@ function viewChart() {
         options: {}
     });
 }
-
-/*
-function showResult()
-{
-
-    let list = document.getElementById('listOfItem');
-    let result;
-
-    for (let i = 0; i < Product.items.length; i++) {
-        //arrShown.push(Product.items[i].shown);
-        result = document.createElement('li');
-        list.appendChild(result);
-        result.textContent = Product.items[i].name + ' has ' + Product.items[i].vote + ' votes ' + ' and shown' + Product.items[i].shown + ' times';
-    }
-}*/
