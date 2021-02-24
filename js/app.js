@@ -9,6 +9,10 @@ let rightImgIndex;
 let arrShown = [];
 let imgName = [];
 let arrVote = [];
+<<<<<<< HEAD
+let checkImage=[];
+=======
+>>>>>>> bc181835de95238eaa732b43b455ddee1496241f
 let maxAttempts = 25;
 
 
@@ -92,12 +96,12 @@ function generateRandomIndex() {
 
 function renderThreeImages() 
 {   
-    check=[leftImgIndex,middleImgIndex,rightImgIndex];
+    checkImage=[leftImgIndex,middleImgIndex,rightImgIndex];
     do{
         leftImgIndex=generateRandomIndex();
         middleImgIndex=generateRandomIndex();
         rightImgIndex=generateRandomIndex();
-    }while((leftImgIndex===middleImgIndex||leftImgIndex===rightImgIndex||middleImgIndex===rightImgIndex||check.includes(leftImgIndex)||check.includes(middleImgIndex)||check.includes (rightImgIndex)));
+    }while((leftImgIndex===middleImgIndex||leftImgIndex===rightImgIndex||middleImgIndex===rightImgIndex||checkImage.includes(leftImgIndex)||checkImage.includes(middleImgIndex)||checkImage.includes (rightImgIndex)));
 
     leftElement.src = Product.items[leftImgIndex].path;
     Product.items[leftImgIndex].shown++;
