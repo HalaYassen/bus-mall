@@ -91,16 +91,13 @@ function generateRandomIndex() {
 //console.log(Math.floor(Math.random() * Product.items.length));
 
 function renderThreeImages() 
-{
-    leftImgIndex = generateRandomIndex();
-    middleImgIndex=generateRandomIndex();
-    while(leftImgIndex ===middleImgIndex){
+{   
+    check=[leftImgIndex,middleImgIndex,rightImgIndex];
+    do{
+        leftImgIndex=generateRandomIndex();
         middleImgIndex=generateRandomIndex();
-    }
-    rightImgIndex=generateRandomIndex();
-    while(rightImgIndex===leftImgIndex||rightImgIndex===middleImgIndex){
         rightImgIndex=generateRandomIndex();
-    }
+    }while((leftImgIndex===middleImgIndex||leftImgIndex===rightImgIndex||middleImgIndex===rightImgIndex||check.includes(leftImgIndex)||check.includes(middleImgIndex)||check.includes (rightImgIndex)));
 
     leftElement.src = Product.items[leftImgIndex].path;
     Product.items[leftImgIndex].shown++;
