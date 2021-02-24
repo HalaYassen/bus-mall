@@ -10,7 +10,6 @@ let arrShown = [];
 let imgName = [];
 let arrVote = [];
 let check=[];
-Product.checkIndex=[];
 let maxAttempts = 25;
 function Product(name, path) {
     this.name = name;
